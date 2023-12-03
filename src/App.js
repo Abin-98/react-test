@@ -11,7 +11,7 @@ const App = () => {
       temp.unshift(data);
       return temp;
     });
-    setTotal(total+data.price)
+    setTotal(total+Number(data["price"]));
   };
   const handleDelete = (ID) => {
     
@@ -19,7 +19,8 @@ const App = () => {
       return prev.filter(e=>e.id!==ID);
     })
     const deletedPrice=JSON.parse(localStorage.getItem(ID))
-    setTotal(total+deletedPrice.price);
+    
+    setTotal(total-deletedPrice.price);
     localStorage.removeItem(ID);
   };
   return (
@@ -38,7 +39,7 @@ const App = () => {
           );
         })}
       </main>
-      <h2>Total Value Worth of Product: Rs. {total}</h2>
+      <h2>Total Value Worth of Product: Rs. {+total}</h2>
     </>
   );
 };
