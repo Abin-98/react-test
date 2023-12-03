@@ -1,25 +1,46 @@
-import logo from './logo.svg';
-import './App.css';
-
-function App() {
+import { useState } from "react";
+import "./App.css";
+import Input from "./Input";
+import Button from "./Button";
+const App = () => {
+  const [list, setList] = useState([]);
+  const [total, setTotal]=useState(0);
+  const getData = (data) => {
+    setList((prev) => {
+      const temp = [...list];
+      temp.unshift(data);
+      return temp;
+    });
+    setTotal(total+data.price)
+  };
+  const handleDelete = (ID) => {
+    
+    setList((prev)=>{
+      return prev.filter(e=>e.id!==ID);
+    })
+    const deletedPrice=JSON.parse(localStorage.getItem(ID))
+    setTotal(total+deletedPrice.price);
+    localStorage.removeItem(ID);
+  };
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    <>
+      <header>
+        <Input userInput={getData} />
       </header>
-    </div>
+      <main>
+        <h1>Products</h1>
+        {list.map((e, i) => {
+          return (
+            <li key={e.id}>
+              {e.price}-{e.product}{" "}
+              <Button identifier={e.id} onClick={handleDelete}>Delete</Button>
+            </li>
+          );
+        })}
+      </main>
+      <h2>Total Value Worth of Product: Rs. {total}</h2>
+    </>
   );
-}
+};
 
 export default App;
